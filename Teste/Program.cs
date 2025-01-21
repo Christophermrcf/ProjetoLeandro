@@ -14,6 +14,7 @@ public struct Pessoa
         Telefone = telefone;
     }
 }
+
 public class Abordagem
 {
     private static List<Pessoa> ListaPessoas = new List<Pessoa>();
@@ -61,11 +62,21 @@ public class Abordagem
         Pessoa NovaPessoa = new Pessoa(cpf, nome, telefone);
         ListaPessoas.Add(NovaPessoa);
 
+        SalvarNoArquivo();
+
         Console.WriteLine("Cadastro realizado com sucesso!");
 
 
     }
+
+    private static void SalvarNoArquivo() {
+    
+    }
+
     private static void GerarLista() { }
     private static void Consultar() { }
-
+    public static void Main() {
+        Abordagem.Opcoes();
     }
+
+}

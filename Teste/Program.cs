@@ -1,5 +1,6 @@
 ﻿using System.Numerics;
 using System.Security.Cryptography.X509Certificates;
+using System.IO;
 
 
 public struct Pessoa
@@ -70,7 +71,12 @@ public class Abordagem
     }
 
     private static void SalvarNoArquivo() {
-    
+        string path = @"C:\Users\CM-0000\Documents\teste.txt";
+        using (StreamWriter sw = new StreamWriter(path, true)) {
+            foreach (var pessoa in ListaPessoas) {
+                sw.WriteLine($"{pessoa.CPF}|{pessoa.Nome}|{pessoa.Telefone}|");
+            }
+        }
     }
 
     private static void GerarLista() { }

@@ -79,7 +79,20 @@ public class Abordagem
         }
     }
 
-    private static void GerarLista() { }
+    private static void GerarLista() {
+        string path = @"C:\Users\CM-0000\Documents\teste.txt";
+        using (StreamReader sr = new StreamReader(path, true)) {
+            var linha = sr.ReadLine();
+
+            while (linha != null) {
+                Console.WriteLine(linha);
+                linha = sr.ReadLine();
+            }
+            
+        }
+
+            Console.WriteLine(path);
+    }
     private static void Consultar() { }
     public static void Main() {
         Abordagem.Opcoes();

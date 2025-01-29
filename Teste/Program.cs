@@ -3,6 +3,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.IO;
 
 
+
 public struct Pessoa
 {
     public string CPF;
@@ -53,14 +54,17 @@ public class Abordagem
 
         Console.Write("Digite o CPF:");
         string cpf = Console.ReadLine();
+        string cpfC = cpf.ToUpper();
 
         Console.WriteLine("Digite o seu Nome:");
         string nome = Console.ReadLine();
+        string nomeC = nome.ToUpper();
 
         Console.WriteLine("Digite o seu Telefone:");
         string telefone = Console.ReadLine();
+        string telefoneC = telefone.ToUpper();
 
-        Pessoa NovaPessoa = new Pessoa(cpf, nome, telefone);
+        Pessoa NovaPessoa = new Pessoa(cpfC, nomeC, telefoneC);
         ListaPessoas.Add(NovaPessoa);
 
         SalvarNoArquivo();
@@ -93,7 +97,25 @@ public class Abordagem
 
             Console.WriteLine(path);
     }
-    private static void Consultar() { }
+    private static void Consultar() {
+        string path = @"C:\Users\CM-0000\Documents\teste.txt";
+        Console.WriteLine("Digite o nome ou CPF que deseja consultar");
+
+      
+        string busca = Console.ReadLine();
+        string buscaMaior = busca.ToUpper();
+
+        using (StreamReader sr = new StreamReader(path)) {
+            string linha;
+            while ((linha = sr.ReadLine()) != null) {
+                if (linha.Contains(busca)) {
+                    Console.WriteLine(linha);
+                }
+            }
+        }
+        
+
+    }
     public static void Main() {
         Abordagem.Opcoes();
     }

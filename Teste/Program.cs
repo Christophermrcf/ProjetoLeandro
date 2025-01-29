@@ -4,18 +4,21 @@ using System.IO;
 
 
 
-public struct Pessoa
-{
-    public string CPF;
-    public string Nome;
-    public string Telefone;
+//public struct Pessoa
+//{
+//    public string CPF;
+//    public string Nome;
+//    public string Telefone;
 
-    public Pessoa(string cpf, string nome, string telefone) {
-        CPF = cpf;
-        Nome = nome;
-        Telefone = telefone;
-    }
-}
+//    public Pessoa(string cpf, string nome, string telefone) {
+//        CPF = cpf;
+//        Nome = nome;
+//        Telefone = telefone;
+//    }
+//}
+
+public record struct Pessoa (string CPF, string Nome, string Telefone);
+
 
 public class Abordagem
 {
@@ -54,17 +57,17 @@ public class Abordagem
 
         Console.Write("Digite o CPF:");
         string cpf = Console.ReadLine();
-        string cpfC = cpf.ToUpper();
+      
 
         Console.WriteLine("Digite o seu Nome:");
         string nome = Console.ReadLine();
-        string nomeC = nome.ToUpper();
+       
 
         Console.WriteLine("Digite o seu Telefone:");
         string telefone = Console.ReadLine();
-        string telefoneC = telefone.ToUpper();
+       
 
-        Pessoa NovaPessoa = new Pessoa(cpfC, nomeC, telefoneC);
+        Pessoa NovaPessoa = new Pessoa(cpf, nome, telefone);
         ListaPessoas.Add(NovaPessoa);
 
         SalvarNoArquivo();
@@ -78,18 +81,25 @@ public class Abordagem
         string path = @"C:\Users\CM-0000\Documents\teste.txt";
         using (StreamWriter sw = new StreamWriter(path, true)) {
             foreach (var pessoa in ListaPessoas) {
-                sw.WriteLine($"{pessoa.CPF}|{pessoa.Nome}|{pessoa.Telefone}|");
+                sw.WriteLine($"|{pessoa.CPF}|{pessoa.Nome}|{pessoa.Telefone}|");
+
+                Console.WriteLine("Arquivo salvo");
+                Opcoes();
             }
         }
+      
     }
 
     private static void GerarLista() {
         string path = @"C:\Users\CM-0000\Documents\teste.txt";
         using (StreamReader sr = new StreamReader(path, true)) {
             var linha = sr.ReadLine();
+            Console.WriteLine("Nome                              | CPF               | Telefone            ");
 
             while (linha != null) {
-                Console.WriteLine(linha);
+                Console.WriteLine(linha.PadRight(76, ' '));
+                Console.WriteLine("-----------------------------------------------------------------------------------");
+
                 linha = sr.ReadLine();
             }
             
@@ -103,13 +113,13 @@ public class Abordagem
 
       
         string busca = Console.ReadLine();
-        string buscaMaior = busca.ToUpper();
+        //string buscaMaior = busca.ToUpper();
 
         using (StreamReader sr = new StreamReader(path)) {
             string linha;
             while ((linha = sr.ReadLine()) != null) {
-                if (linha.Contains(busca)) {
-                    Console.WriteLine(linha);
+                if (linha.Contains(busca, StringComparison.OrdinalIgnoreCase)) {
+                    Console.WriteLine(linha.ToUpper());
                 }
             }
         }

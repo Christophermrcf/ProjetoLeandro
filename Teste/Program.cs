@@ -17,6 +17,9 @@ using System.IO;
 //    }
 //}
 
+public record struct Pessoa(string CPF, string Nome, string Telefone);
+
+
 public record struct Pessoa (string CPF, string Nome, string Telefone);
 
 
@@ -46,26 +49,36 @@ public class Abordagem
             case "4":
                 return;
             default:
-                Console.WriteLine("Opção inválida");
+                Console.WriteLine("Opção inválida, tente novamente");
+                Console.WriteLine("______________________________________________");
+                Opcoes();
+
+
                 break;
 
         }
     }
 
-        private static void Cadastrar() {
+    private static void Cadastrar() {
         Console.WriteLine("Opção selecionada: Cadastrar");
-
         Console.Write("Digite o CPF:");
         string cpf = Console.ReadLine();
-      
+        string apenasNumeros = RetornarNumeros(cpf);
+
+        while (apenasNumeros.Length != 11) {
+            Console.WriteLine("Não segue o padrão CPF, digite novamente");
+            cpf = Console.ReadLine();
+            apenasNumeros = RetornarNumeros(cpf);
+
+        };
 
         Console.WriteLine("Digite o seu Nome:");
         string nome = Console.ReadLine();
-       
+
 
         Console.WriteLine("Digite o seu Telefone:");
         string telefone = Console.ReadLine();
-       
+
 
         Pessoa NovaPessoa = new Pessoa(cpf, nome, telefone);
         ListaPessoas.Add(NovaPessoa);
@@ -77,6 +90,22 @@ public class Abordagem
 
     }
 
+    private static bool CpfEhValido(string texto) {
+        texto.Replace(".", "").Replace("-", "").Trim();
+    }
+
+    private static string RetornarNumeros(string texto) {
+
+        //while (cpf.Length != 11) {
+        //    Console.WriteLine("cpf não esta seguindo o tamanho padrão");
+        //    Console.WriteLine("digite o cpf novamente, lembrando que o tamanho padrão contem 11 digitos");
+        //    cpf = Console.ReadLine();
+        //} 
+
+
+        return string.Join("", texto.ToCharArray().Where(caractere => Char.IsDigit(caractere)).ToList());
+    }
+
     private static void SalvarNoArquivo() {
         string path = @"C:\Users\CM-0000\Documents\teste.txt";
         using (StreamWriter sw = new StreamWriter(path, true)) {
@@ -84,10 +113,12 @@ public class Abordagem
                 sw.WriteLine($"|{pessoa.CPF}|{pessoa.Nome}|{pessoa.Telefone}|");
 
                 Console.WriteLine("Arquivo salvo");
-                Opcoes();
+                Console.WriteLine("retornando ao menu inicial");
+                Console.WriteLine("_____________________________________________________________");
             }
         }
-      
+        Opcoes();
+
     }
 
     private static void GerarLista() {
@@ -97,21 +128,24 @@ public class Abordagem
             Console.WriteLine("Nome                              | CPF               | Telefone            ");
 
             while (linha != null) {
-                Console.WriteLine(linha.PadRight(76, ' '));
+                string[] separada = linha.Split('|', StringSplitOptions.RemoveEmptyEntries);
+                Console.WriteLine($"{separada[1].PadRight(30)}| {separada[0].PadRight(11)} | {separada[2].PadRight(11)}");
+
                 Console.WriteLine("-----------------------------------------------------------------------------------");
+
 
                 linha = sr.ReadLine();
             }
-            
+
         }
 
-            Console.WriteLine(path);
+        Console.WriteLine(path);
     }
     private static void Consultar() {
         string path = @"C:\Users\CM-0000\Documents\teste.txt";
         Console.WriteLine("Digite o nome ou CPF que deseja consultar");
 
-      
+
         string busca = Console.ReadLine();
         //string buscaMaior = busca.ToUpper();
 
@@ -123,7 +157,7 @@ public class Abordagem
                 }
             }
         }
-        
+
 
     }
     public static void Main() {

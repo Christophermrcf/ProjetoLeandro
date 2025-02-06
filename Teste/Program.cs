@@ -1,6 +1,7 @@
 ﻿using System.Numerics;
 using System.Security.Cryptography.X509Certificates;
 using System.IO;
+using System.Text.RegularExpressions;
 
 
 
@@ -18,17 +19,12 @@ using System.IO;
 //}
 
 public record struct Pessoa(string CPF, string Nome, string Telefone);
-
-
-public record struct Pessoa (string CPF, string Nome, string Telefone);
-
-
 public class Abordagem
 {
     private static List<Pessoa> ListaPessoas = new List<Pessoa>();
     public static void Opcoes() {
         Console.WriteLine("Escolha a opcao desejada:");
-        Console.WriteLine("1 - Cadatrar");
+        Console.WriteLine("1 - Cadastrar");
         Console.WriteLine("2 - Gerar Lista");
         Console.WriteLine("3 - Consultar ");
         Console.WriteLine("4 - Sair");
@@ -62,15 +58,28 @@ public class Abordagem
     private static void Cadastrar() {
         Console.WriteLine("Opção selecionada: Cadastrar");
         Console.Write("Digite o CPF:");
-        string cpf = Console.ReadLine();
-        string apenasNumeros = RetornarNumeros(cpf);
+        string cpf = Console.ReadLine().Replace(".", "").Replace("-", "").Trim();
 
-        while (apenasNumeros.Length != 11) {
-            Console.WriteLine("Não segue o padrão CPF, digite novamente");
+
+        bool ehValidoCpf = Regex.IsMatch(cpf, @"^\d{11}$");
+
+        while (ehValidoCpf != true) {
+            Console.WriteLine("Formatação incoerente com o padrão CPF");
             cpf = Console.ReadLine();
-            apenasNumeros = RetornarNumeros(cpf);
-
+            ehValidoCpf = Regex.IsMatch(cpf, @"^\d{11}$");
         };
+
+
+        //string apenasNumeros = RetornarNumeros(cpf);
+
+        //while (apenasNumeros.Length != 11) {
+        //    Console.WriteLine("Não segue o padrão CPF, digite novamente");
+        //    cpf = Console.ReadLine();
+        //    apenasNumeros = RetornarNumeros(cpf);
+
+
+        //};
+
 
         Console.WriteLine("Digite o seu Nome:");
         string nome = Console.ReadLine();
@@ -90,9 +99,9 @@ public class Abordagem
 
     }
 
-    private static bool CpfEhValido(string texto) {
-        texto.Replace(".", "").Replace("-", "").Trim();
-    }
+    //private static bool CpfEhValido(string texto) {
+    //    texto.Replace(".", "").Replace("-", "").Trim();
+    //}
 
     private static string RetornarNumeros(string texto) {
 
